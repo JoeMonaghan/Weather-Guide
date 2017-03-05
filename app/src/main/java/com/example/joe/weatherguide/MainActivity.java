@@ -3,8 +3,10 @@ package com.example.joe.weatherguide;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -16,6 +18,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -78,17 +81,20 @@ public class MainActivity extends AppCompatActivity {
 
         db = new PreferenceOpenHelper(this);
 
+
         /**
          * Insert the information for the
          */
 
-        boolean insert = db.insertThemeData(1, "Light Blue & White", "#5892ef", "#ffffff");
-        db.insertThemeData(1, "Dark Blue & White", "#09295e", "#ffffff");
-        db.insertThemeData(1, "White & Dark Blue", "#ffffff", "#5892ef");
+        if(!(db.isInserted())){
 
-        if(insert){
-            Log.v("Db", "Inserted data");
+            db.insertThemeData(101, "Light Blue and White", "#5892ef", 1);
+            db.insertThemeData(102, "Dark Blue and White", "#09295e", 0);
+            db.insertThemeData(103, "White and Dark Blue", "#ffffff", 0);
         }
+
+        String color = db.getData("Light Blue and White");
+
 
         cityText = (TextView) findViewById(R.id.cityText);
         temp = (TextView) findViewById(R.id.tempText);
@@ -192,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+
 
     public void renderWeatherData(String lat, String log) {
 
@@ -324,13 +332,42 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+        String itemSelected = (String) item.getTitle();
+
+        String color = db.getData(itemSelected);
+
+
+        switch (itemSelected) {
+
+            case "Light Blue and White" :
+                setTheme(color);
+                break;
+            case "Dark Blue and White":
+                setTheme("#09295e");
+                break;
+            case "White and Dark Blue":
+                setTheme("#ffffff");
+                break;
+
         }
+
 
         return super.onOptionsItemSelected(item);
     }
+
+
+     public void setTheme(String backgroundColor){
+
+        View child = findViewById(R.id.cloudText);
+
+        View parent = child.getRootView();
+
+        int color = Color.parseColor(backgroundColor);
+
+        parent.setBackgroundColor(color);
+
+    }
+
 }

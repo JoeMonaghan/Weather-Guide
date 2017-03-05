@@ -2,8 +2,10 @@ package data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by joe on 03/03/2017.
@@ -18,15 +20,15 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
 
     private static final String THEME_ID = "THEME_ID";
     private static final String THEME_NAME = "THEME_NAME";
-    private static final String BACKGROUND_COLOR = "BACKGROUND";
-    private static final String TEXT_COLOR = "TEXT_COLOR";
+    private static final String BACKGROUND = "BACKGROUND";
+    private static final String SELECTED = "SELECTED";
 
     private static final String PREFERENCE_TABLE_CREATE =
             "CREATE TABLE " + PREFERENCE_TABLE_NAME + " (" +
                     THEME_ID + " INT PRIMARY KEY NOT NULL,\n" +
                     THEME_NAME + " TEXT NOT NULL,\n" +
-                    BACKGROUND_COLOR + " TEXT NOT NULL,\n" +
-                    TEXT_COLOR + " TEXT NOT NULL );";
+                    BACKGROUND + " TEXT NOT NULL,\n" +
+                    SELECTED + " TINYINT NOT NULL );";
 
     public PreferenceOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,7 +46,7 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertThemeData(int themeID, String name, String bgColor, String textColor){
+    public boolean insertThemeData(int themeID, String name, String bgColor, int selected){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -53,8 +55,8 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
         //
         contentValues.put(THEME_ID, themeID);
         contentValues.put(THEME_NAME, name);
-        contentValues.put(BACKGROUND_COLOR, bgColor);
-        contentValues.put(TEXT_COLOR, textColor);
+        contentValues.put(BACKGROUND, bgColor);
+        contentValues.put(SELECTED, selected);
 
         long result = db.insert(PREFERENCE_TABLE_NAME, null, contentValues);
 
@@ -64,5 +66,44 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
 
         return true;
 
+    }
+
+
+    public String getData(String title){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+       //
+
+
+        try{
+            Cursor res = db.rawQuery("select " + BACKGROUND + " from " + PREFERENCE_TABLE_NAME + " where " + THEME_NAME + " = \"" + title +"\";", null );
+
+            if(res.getCount() == 0){
+                Log.v("Cursor", "Query not getting any data");
+            }
+            Cursor result = db.rawQuery("SELECT * FROM " + PREFERENCE_TABLE_NAME, null);
+
+            if(result.getCount() == 0){
+                Log.v("Cursor", " nothing is database");
+            }
+
+            String str = res.getString(0);
+
+            return str;
+        } catch (Exception e){
+            Log.v("Cursor", "Not working");
+        }
+
+        return null;
+
+    }
+
+    public boolean isInserted(){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor result = db.rawQuery("SELECT * FROM " + PREFERENCE_TABLE_NAME, null);
+
+        return result.getCount() > 0;
     }
 }
