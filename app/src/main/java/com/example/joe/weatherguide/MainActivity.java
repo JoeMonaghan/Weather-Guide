@@ -2,6 +2,7 @@ package com.example.joe.weatherguide;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Layout;
@@ -23,8 +25,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -32,6 +37,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.FieldPosition;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import data.PreferenceOpenHelper;
@@ -43,6 +51,16 @@ import utilities.Utility;
 public class MainActivity extends AppCompatActivity {
 
 
+
+
+    public static final String PLACES_MESSAGE = "com..example.weatherguide2.MESSAGE";
+
+    /**
+     * Create a view object for each weather information returned.
+     *
+     *
+     *
+     */
 
     private TextView cityText;
     private TextView temp;
@@ -56,8 +74,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView updated;
 
 
+    /**
+     * The weather instance will contain the
+     *
+     *
+     */
     Weather weather = new Weather();
 
+
+    /**
+     * Database
+     */
 
     PreferenceOpenHelper db;
 
@@ -86,15 +113,6 @@ public class MainActivity extends AppCompatActivity {
          * Insert the information for the
          */
 
-        if(!(db.isInserted())){
-
-            db.insertThemeData(101, "Light Blue and White", "#5892ef", 1);
-            db.insertThemeData(102, "Dark Blue and White", "#09295e", 0);
-            db.insertThemeData(103, "White and Dark Blue", "#ffffff", 0);
-        }
-
-        String color = db.getData("Light Blue and White");
-
 
         cityText = (TextView) findViewById(R.id.cityText);
         temp = (TextView) findViewById(R.id.tempText);
@@ -112,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
         // Register the listener with the Location Manager to receive location updates
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+//                ActivityCompat#requestPermissions
+//             here to request the missing permissions, and then overriding
+//               public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//                                                      int[] grantResults)
+//             to handle the case where the user grants the permission. See the documentation
+//             for ActivityCompat#requestPermissions for more details.
 
-            Log.v("Need to get permissions", "Not working");
+
 
             return;
         }
@@ -160,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         String provider = locationManager.getBestProvider(new Criteria(), false);
 
         /**
@@ -168,6 +187,8 @@ public class MainActivity extends AppCompatActivity {
          */
         // get the cached location
         Location location = locationManager.getLastKnownLocation(provider);
+
+
 
 
         /**
@@ -185,16 +206,27 @@ public class MainActivity extends AppCompatActivity {
         locationManager.requestLocationUpdates(provider, (1000 * 60 * 30), 4000, locationListener);
 
 
+        /**
+         * The api only takes the latitude and longitude to two decimal places.
+         * Round the two coordinates to appropriate values.
+         */
+        Double latitude = Math.round(location.getLatitude() * 100) / 100.0;
 
-        String lat = Double.toString(location.getLatitude());
+        Double longitude = Math.round(location.getLongitude() * 100) / 100.0;
 
-        String lon = Double.toString(location.getLongitude());
+        /**
+         * Convert the values to string
+         *
+         */
+        String lat = Double.toString(latitude);
 
-        Log.v("Lat : "+lat,lon);
+        String lon = Double.toString(longitude);
 
-        renderWeatherData(lat,lon);
-
-        Log.v("After", "data call");
+        /**
+         * Get and render the weather information.
+         *
+         */
+        renderWeatherData(lat, lon);
 
 
     }
@@ -272,6 +304,9 @@ public class MainActivity extends AppCompatActivity {
 
             weather.iconData = weather.currentCondition.getIcon();
 
+
+            Log.v("City ", weather.place.getCity());
+
             new DownloadImage().execute(weather.iconData);
 
             return weather;
@@ -300,7 +335,11 @@ public class MainActivity extends AppCompatActivity {
             String pressureFormat = decimalFormat.format(weather.currentCondition.getPressure());
 
 
+            String message = "The city is " + weather.place.getLon();
 
+            Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT );
+
+            toast.show();
 
 
             Log.v("from renderWeather: ", weather.place.getCity() +" & " + weather.place.getCountry());
@@ -336,13 +375,12 @@ public class MainActivity extends AppCompatActivity {
 
         String itemSelected = (String) item.getTitle();
 
-        String color = db.getData(itemSelected);
 
 
         switch (itemSelected) {
 
             case "Light Blue and White" :
-                setTheme(color);
+                setTheme("#5895ef");
                 break;
             case "Dark Blue and White":
                 setTheme("#09295e");
@@ -355,6 +393,112 @@ public class MainActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDialog(View view){
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        final View dialog = getLayoutInflater().inflate(R.layout.dialog_details, null);
+
+
+        final EditText nameDialog = (EditText) dialog.findViewById(R.id.editName);
+
+        final TextView locationView = (TextView) dialog.findViewById(R.id.locationTxt);
+
+        // show the current location and the one that will be stored.
+        locationView.setText(cityText.getText().toString());
+
+        Button storeBtnDialog = (Button) dialog.findViewById(R.id.storeBtn);
+
+
+        /**
+         * If the store button is clicked
+         *
+         */
+        storeBtnDialog.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+
+                String name = nameDialog.getText().toString();
+                Context context = getApplicationContext();
+
+                String message;
+
+                if(name.isEmpty()){
+
+                    message = "A name must contain at least one character";
+
+                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT );
+
+                    toast.show();
+
+                } else {
+
+                    String city = cityText.getText().toString();
+
+                   boolean inserted =  db.insertLocationData(name, city);
+
+                    if(inserted){
+
+                        message = "Name and location stored";
+
+                    } else {
+
+                        message = "Unable to inserted information!";
+                    }
+
+                    Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT );
+
+                    toast.show();
+
+                }
+
+
+            }
+        });
+
+
+        builder.setView(dialog);
+       final AlertDialog dialog1 = builder.create();
+        dialog1.show();
+
+    }
+
+    public void showPlaces(View view){
+
+
+
+
+        Cursor result = db.getData();
+
+        if(result == null || result.getCount() == 0){
+            String message = "No places to show";
+
+            Toast toast = Toast.makeText(getApplicationContext(), message , Toast.LENGTH_SHORT );
+
+            toast.show();
+
+            return;
+        }
+
+        Intent intent  = new Intent(this, DisplayPlacesActivity.class);
+
+        StringBuffer places = new StringBuffer();
+
+        while(result.moveToNext()){
+            places.append(result.getString(1) + " : " + result.getString(2) + "\n");
+        }
+
+
+        places.toString();
+
+        intent.putExtra(PLACES_MESSAGE, (CharSequence) places);
+
+        startActivity(intent);
+
     }
 
 

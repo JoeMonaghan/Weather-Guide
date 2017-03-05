@@ -26,8 +26,8 @@ public class WeatherHttpClient {
 
         try {
 
-            url = new URL(Utility.BASE_URL + "lat="+lat+"&lon="+lat + "&units=metric&appid=f1c919321e6e4559ac228b900faafb60");
-
+           // url = new URL(Utility.BASE_URL + "lat="+lat+"&lon="+lat + "&appid=f1c919321e6e4559ac228b900faafb60");
+                url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + log + "&units=metric&appid=f1c919321e6e4559ac228b900faafb60");
 
 
             connection = (HttpURLConnection) url.openConnection();

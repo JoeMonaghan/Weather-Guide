@@ -14,21 +14,20 @@ import android.util.Log;
 public class PreferenceOpenHelper extends SQLiteOpenHelper {
 
     // .db was added in tutorial
-    private static final String DATABASE_NAME = "Theme.db";
+    private static final String DATABASE_NAME = "Locations.db";
     private static final int DATABASE_VERSION = 2;
-    private static final String PREFERENCE_TABLE_NAME = "Theme";
+    private static final String PREFERENCE_TABLE_NAME = "NameLocation";
 
-    private static final String THEME_ID = "THEME_ID";
-    private static final String THEME_NAME = "THEME_NAME";
-    private static final String BACKGROUND = "BACKGROUND";
-    private static final String SELECTED = "SELECTED";
+    private static final String ID = "ID";
+    private static final String PERSON_NAME = "PERSON_NAME";
+    private static final String CITY = "CITY";
+
 
     private static final String PREFERENCE_TABLE_CREATE =
             "CREATE TABLE " + PREFERENCE_TABLE_NAME + " (" +
-                    THEME_ID + " INT PRIMARY KEY NOT NULL,\n" +
-                    THEME_NAME + " TEXT NOT NULL,\n" +
-                    BACKGROUND + " TEXT NOT NULL,\n" +
-                    SELECTED + " TINYINT NOT NULL );";
+                    ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                    PERSON_NAME + " TEXT NOT NULL,\n" +
+                    CITY + " TEXT NOT NULL);";
 
     public PreferenceOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,19 +45,17 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertThemeData(int themeID, String name, String bgColor, int selected){
+    public boolean insertLocationData(String name, String city){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
 
-        //
-        contentValues.put(THEME_ID, themeID);
-        contentValues.put(THEME_NAME, name);
-        contentValues.put(BACKGROUND, bgColor);
-        contentValues.put(SELECTED, selected);
 
-        long result = db.insert(PREFERENCE_TABLE_NAME, null, contentValues);
+        contentValues.put(PERSON_NAME, name);
+        contentValues.put(CITY, city);
+
+       long result = db.insert(PREFERENCE_TABLE_NAME, null, contentValues);
 
         if(result == -1){
             return false;
@@ -69,28 +66,20 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
     }
 
 
-    public String getData(String title){
+    public Cursor getData(){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
-       //
-
-
         try{
-            Cursor res = db.rawQuery("select " + BACKGROUND + " from " + PREFERENCE_TABLE_NAME + " where " + THEME_NAME + " = \"" + title +"\";", null );
 
-            if(res.getCount() == 0){
-                Log.v("Cursor", "Query not getting any data");
-            }
-            Cursor result = db.rawQuery("SELECT * FROM " + PREFERENCE_TABLE_NAME, null);
+            Cursor result = db.rawQuery("select * from " + PREFERENCE_TABLE_NAME + ";", null );
 
-            if(result.getCount() == 0){
-                Log.v("Cursor", " nothing is database");
+            if(result.getCount() == 0 ){
+                return null;
             }
 
-            String str = res.getString(0);
+            return result;
 
-            return str;
         } catch (Exception e){
             Log.v("Cursor", "Not working");
         }

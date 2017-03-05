@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">WeatherGuide</string>
     <string name="action_settings">Change Theme</string>
+    <string name="button_text">Store Details</string>
+    <string name="EnterName">Enter Name</string>
+    <string name="title_activity_display_places">DisplayPlacesActivity</string>
 </resources>
