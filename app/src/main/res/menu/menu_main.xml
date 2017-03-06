@@ -11,7 +11,7 @@
             android:title="Light Blue and White" />
         <item android:id="@+id/DarkBlue"
             android:title="Dark Blue and White" />
-        <item android:id="@+id/White"
-            android:title="White and Dark Blue" />
+        <item android:id="@+id/Green"
+            android:title="Green and White" />
     </group>
 </menu>

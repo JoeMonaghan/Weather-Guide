@@ -11,12 +11,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.joe.weatherguide.MainActivity"
+    android:background="#09295e"
     tools:showIn="@layout/activity_main">
 
     <TextView
         android:id="@+id/cityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:text="Liverpool, UK"
         android:textSize="30sp"
         android:textStyle="bold" />
@@ -27,26 +29,6 @@
         android:layout_height="150dp"
         android:layout_below="@+id/cityText"
         android:layout_marginTop="20dp" />
-
-    <TextView
-        android:id="@+id/tempText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/thumbnailIcon"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="25dp"
-        android:layout_toRightOf="@+id/thumbnailIcon"
-        android:text="12 deg"
-        android:textSize="42dp" />
-
-    <TextView
-        android:id="@+id/pressureText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/thumbnailIcon"
-        android:layout_marginTop="35dp"
-        android:text="Pressure"
-        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/humidityText"
@@ -102,17 +84,55 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+
+
     <Button
         android:id="@+id/showDialogBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_text"
-        android:layout_below="@id/lastupdateText"
-        android:onClick="showDialog"/>
+        android:onClick="showDialog"
+        android:background="#58079e"
+        android:layout_alignBaseline="@+id/showPlacesDialog"
+        android:layout_alignBottom="@+id/showPlacesDialog"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/showPlacesDialog"
+        android:layout_toStartOf="@+id/showPlacesDialog" />
+
+    <TextView
+        android:id="@+id/pressureText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:text="Pressure"
+        android:textSize="16sp"
+        android:layout_below="@+id/thumbnailIcon"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:id="@+id/tempText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12 deg"
+        android:textSize="42dp"
+        android:layout_alignTop="@+id/thumbnailIcon"
+        android:layout_toRightOf="@+id/thumbnailIcon"
+        android:layout_toEndOf="@+id/thumbnailIcon"
+        android:layout_marginLeft="28dp"
+        android:layout_marginStart="28dp" />
 
     <Button
+        android:id="@+id/showPlacesDialog"
+        android:background="#58079e"
         android:text="Show Places"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="showPlaces"/>
+        android:onClick="showPlaces"
+        android:layout_below="@+id/lastupdateText"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignLeft="@+id/tempText"
+        android:layout_alignStart="@+id/tempText" />
 </RelativeLayout>

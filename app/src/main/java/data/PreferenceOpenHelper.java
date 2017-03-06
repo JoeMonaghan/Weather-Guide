@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
+ *
+ * REQUIREMENT 12
+ *
+ *
  * Created by joe on 03/03/2017.
  */
 
@@ -45,12 +49,20 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * REQUIREMENT 12.
+     * Insert the name and city which the user is located.
+     * If the insertion is unsuccessful return false, otherwise return
+     * true.
+     * @param name of user
+     * @param city (location of the user)
+     * @return
+     */
     public boolean insertLocationData(String name, String city){
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-
 
         contentValues.put(PERSON_NAME, name);
         contentValues.put(CITY, city);
@@ -66,6 +78,14 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
     }
 
 
+    /**
+     * REQUIREMENT 12.
+     * A Cursor object is required to traverse all the records in
+     * the database. The cursor will contain all the previous  stored locations
+     *
+     *
+     * @return
+     */
     public Cursor getData(){
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -88,11 +108,4 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean isInserted(){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor result = db.rawQuery("SELECT * FROM " + PREFERENCE_TABLE_NAME, null);
-
-        return result.getCount() > 0;
-    }
 }

@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
     PreferenceOpenHelper db;
 
+    public static final int MY_PERMISSIONS_REQUEST = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,15 +97,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
 
         db = new PreferenceOpenHelper(this);
@@ -126,20 +119,21 @@ public class MainActivity extends AppCompatActivity {
         updated = (TextView) findViewById(R.id.lastupdateText);
 
 
-        // NEED UPDATES FOR THE LOCAITON CASE THERE IS A CHANGE IN LOCATION OR LOST OF SERVICE
-        // Register the listener with the Location Manager to receive location updates
+        /**
+         * If permission to use network services or not provide then a
+         * prompt must be persented to the user asking for permission.
+         * If the user rejects permssion then the application must close,
+         * as there no point continueing i.e need location to work and may
+         * not be in may be different city
+         *
+         */
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
-//                ActivityCompat#requestPermissions
-//             here to request the missing permissions, and then overriding
-//               public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                                                      int[] grantResults)
-//             to handle the case where the user grants the permission. See the documentation
-//             for ActivityCompat#requestPermissions for more details.
 
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.INTERNET, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    MY_PERMISSIONS_REQUEST);
 
-
-            return;
         }
 
         // Acquire a reference to the system Location Manager
@@ -231,6 +225,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST : {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    return;
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
 
 
     public void renderWeatherData(String lat, String log) {
@@ -298,14 +317,10 @@ public class MainActivity extends AppCompatActivity {
 
             String data = ((new WeatherHttpClient()).getWeatherData(params[0],params[1]));
 
-
-
             weather = JSONWeatherparser.getWeather(data);
 
             weather.iconData = weather.currentCondition.getIcon();
 
-
-            Log.v("City ", weather.place.getCity());
 
             new DownloadImage().execute(weather.iconData);
 
@@ -334,24 +349,18 @@ public class MainActivity extends AppCompatActivity {
 
             String pressureFormat = decimalFormat.format(weather.currentCondition.getPressure());
 
-
-            String message = "The city is " + weather.place.getLon();
-
-            Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT );
-
-            toast.show();
-
-
-            Log.v("from renderWeather: ", weather.place.getCity() +" & " + weather.place.getCountry());
-
-
+            /**
+             *
+             *
+             *
+             */
             cityText.setText(weather.place.getCity() + "," + weather.place.getCountry());
             temp.setText(tempFormat + "°C");
             //iconView add a picture
             description.setText("Condition : " + weather.currentCondition.getCondition()+ "("+ weather.currentCondition.getDescription() +")");
             humidity.setText("Humidity : " + humidiytFormat + "%");
-            pressure.setText("Pressure : " + pressureFormat + "hPa");
-            wind.setText("Wind : " + weather.wind.getSpeed()+"mph");
+            pressure.setText("Pressure : " + pressureFormat + " hPa");
+            wind.setText("Wind : " + weather.wind.getSpeed()+" mph");
             sunrise.setText("Sunrise : " + sunRaise);
             sunset.setText("Sunset : " + sunSet);
             updated.setText("Last update : " + upDate);
@@ -376,7 +385,6 @@ public class MainActivity extends AppCompatActivity {
         String itemSelected = (String) item.getTitle();
 
 
-
         switch (itemSelected) {
 
             case "Light Blue and White" :
@@ -385,8 +393,8 @@ public class MainActivity extends AppCompatActivity {
             case "Dark Blue and White":
                 setTheme("#09295e");
                 break;
-            case "White and Dark Blue":
-                setTheme("#ffffff");
+            case "Green and White":
+                setTheme("#24b764");
                 break;
 
         }
@@ -445,6 +453,7 @@ public class MainActivity extends AppCompatActivity {
 
                         message = "Name and location stored";
 
+
                     } else {
 
                         message = "Unable to inserted information!";
@@ -462,7 +471,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         builder.setView(dialog);
-       final AlertDialog dialog1 = builder.create();
+        final AlertDialog dialog1 = builder.create();
         dialog1.show();
 
     }
