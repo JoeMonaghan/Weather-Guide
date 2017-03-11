@@ -4,6 +4,7 @@
     tools:context="com.example.joe.weatherguide.MainActivity">
 
 
+    <!-- REQUIREMENT 9 CHANGE THEME FEATURE  -->
     <group
         android:id="@+id/ThemeOption"
         android:checkableBehavior="single">

@@ -43,6 +43,9 @@ public class WeatherHttpClient {
 
             String line = null;
 
+            // close the connection
+            connection.disconnect();
+
             while((line = bufferedReader.readLine()) != null){
                 stringBuffer.append(line + "\r\n");
             }

@@ -10,6 +10,7 @@ import android.util.Log;
 /**
  *
  * REQUIREMENT 12
+ * CREATED
  *
  *
  * Created by joe on 03/03/2017.
@@ -17,9 +18,12 @@ import android.util.Log;
 
 public class PreferenceOpenHelper extends SQLiteOpenHelper {
 
-    // .db was added in tutorial
+    // .
     private static final String DATABASE_NAME = "Locations.db";
+    // the version of database.
     private static final int DATABASE_VERSION = 2;
+
+    // I have g
     private static final String PREFERENCE_TABLE_NAME = "NameLocation";
 
     private static final String ID = "ID";
@@ -27,6 +31,7 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
     private static final String CITY = "CITY";
 
 
+    // Create table
     private static final String PREFERENCE_TABLE_CREATE =
             "CREATE TABLE " + PREFERENCE_TABLE_NAME + " (" +
                     ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
@@ -54,6 +59,7 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
      * Insert the name and city which the user is located.
      * If the insertion is unsuccessful return false, otherwise return
      * true.
+     * MODIFTED AND INSERTED
      * @param name of user
      * @param city (location of the user)
      * @return
@@ -82,7 +88,7 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
      * REQUIREMENT 12.
      * A Cursor object is required to traverse all the records in
      * the database. The cursor will contain all the previous  stored locations
-     *
+     * ACCESSED.
      *
      * @return
      */

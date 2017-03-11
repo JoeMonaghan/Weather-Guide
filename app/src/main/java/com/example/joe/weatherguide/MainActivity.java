@@ -121,15 +121,11 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * If permission to use network services or not provide then a
-         * prompt must be persented to the user asking for permission.
-         * If the user rejects permssion then the application must close,
-         * as there no point continueing i.e need location to work and may
-         * not be in may be different city
-         *
+         * prompt must be presented to the user asking for permission.
          */
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
 
+            // Display the prompt
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.INTERNET, Manifest.permission.ACCESS_COARSE_LOCATION},
                     MY_PERMISSIONS_REQUEST);
@@ -238,15 +234,15 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    // permission denied
+                    // so stop the application.
+                    android.os.Process.killProcess(android.os.Process.myPid());
 
                 }
                 return;
             }
 
-            // other 'case' lines to check for other
-            // permissions this app might request
+
         }
     }
 
@@ -368,6 +364,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * REQUIREMENT 9 CHANGE THEME FEATURE.
+     * The method is called when the user clicks the option menu icon.
+     * The xml file menu_main.xml will be inflated in the top right hand corner
+     * of the screen.
+     * @param menu
+     * @return
+     * @see res/menu/menu_main.xml
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -375,16 +382,22 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * REQUIREMENT 9 CHANGE THEME FEATURE.
+     * When a single item is selected, the item's object that is selected will be passed in.
+     * Depending on this item by getting its title change the background colour to the
+     * necessary colour.
+     * @param item
+     * @return
+     * @see res/menu/menu_main.xml
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
-
+        // get the title of the selected item.
         String itemSelected = (String) item.getTitle();
 
-
+        // determine the background colour.
         switch (itemSelected) {
 
             case "Light Blue and White" :
@@ -511,14 +524,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-     public void setTheme(String backgroundColor){
+    /**
+     * REQUIREMENT 9 CHANGE THEME FEATURE
+     * Changes the background colour based on the backgroundColor.
+     * @param backgroundColor
+     */
+     private void setTheme(String backgroundColor){
 
+         // get any child view in activity main layout.
         View child = findViewById(R.id.cloudText);
 
+         // the parent will be the Relative layout object
         View parent = child.getRootView();
 
+         // parse the colour
         int color = Color.parseColor(backgroundColor);
 
+         // set the background.
         parent.setBackgroundColor(color);
 
     }
