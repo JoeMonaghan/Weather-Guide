@@ -3,5 +3,9 @@
     <string name="action_settings">Change Theme</string>
     <string name="button_text">Store Details</string>
     <string name="EnterName">Enter Name</string>
-    <string name="title_activity_display_places">DisplayPlacesActivity</string>
+    <string name="store">Store</string>
+    <string name="darkblue">Dark Blue</string>
+    <string name="lightblue">Light Blue</string>
+    <string name="title_activity_display_places">DisplayPacesActivity</string>
+    <string name="green">Green</string>
 </resources>

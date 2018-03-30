@@ -7,15 +7,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import utilities.Utility;
 
 /**
- * Created by joe on 01/03/2017.
+ * REQUIREMENT 4.
+ * This class contains the required functionality to connect with
+ * the open weather map API.
  */
 
 public class WeatherHttpClient {
 
-    public String getWeatherData(String lat, String log){
+    /**
+     * Connect with the API by setting up a http connection.
+     *
+     * @param lat
+     * @param log
+     * @return a string representation of the returned message from API.
+     */
+    public String getWeatherData(String lat, String log) {
 
         URL url = null;
 
@@ -26,19 +34,23 @@ public class WeatherHttpClient {
 
         try {
 
-           // url = new URL(Utility.BASE_URL + "lat="+lat+"&lon="+lat + "&appid=f1c919321e6e4559ac228b900faafb60");
-                url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + log + "&units=metric&appid=f1c919321e6e4559ac228b900faafb60");
-
-
+            url = new URL("http://api.openweathermap.org/data/2.5/weather?lat=" + lat +
+                    "&lon=" + log + "&units=metric&appid=f1c919321e6e4559ac228b900faafb60");
             connection = (HttpURLConnection) url.openConnection();
 
+            // use  a get request.
             connection.setRequestMethod("GET");
             // done twice in video.
             connection.setDoInput(true);
+
+            // try to connect
             connection.connect();
 
             StringBuffer stringBuffer = new StringBuffer();
+
+            // get the return data.
             inputStream = connection.getInputStream();
+
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line = null;
@@ -46,7 +58,8 @@ public class WeatherHttpClient {
             // close the connection
             connection.disconnect();
 
-            while((line = bufferedReader.readLine()) != null){
+            // keep adding to string buffer until the end is reached.
+            while ((line = bufferedReader.readLine()) != null) {
                 stringBuffer.append(line + "\r\n");
             }
 

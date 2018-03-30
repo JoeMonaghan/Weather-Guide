@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.joe.weatherguide.MainActivity">
 
-
     <!-- REQUIREMENT 9 CHANGE THEME FEATURE  -->
     <group
         android:id="@+id/ThemeOption"
         android:checkableBehavior="single">
         <item android:id="@+id/LightBlue"
-            android:title="Light Blue and White" />
+            android:title="@string/lightblue"/>
         <item android:id="@+id/DarkBlue"
-            android:title="Dark Blue and White" />
+            android:title="@string/darkblue" />
         <item android:id="@+id/Green"
-            android:title="Green and White" />
+            android:title="@string/green" />
     </group>
 </menu>

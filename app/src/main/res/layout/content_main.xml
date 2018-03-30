@@ -12,13 +12,12 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.joe.weatherguide.MainActivity"
     tools:showIn="@layout/activity_main">
-
+    <!-- REQUIREMENT 8 -->
     <TextView
         android:id="@+id/cityText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="Liverpool, UK"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -34,8 +33,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pressureText"
-        android:layout_marginTop="5dp"
-        android:text="Humidity"
         android:textSize="16sp" />
 
     <TextView
@@ -43,8 +40,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/humidityText"
-        android:layout_marginTop="5dp"
-        android:text="Cloud"
         android:textSize="16sp" />
 
     <TextView
@@ -52,8 +47,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/cloudText"
-        android:layout_marginTop="5dp"
-        android:text="Wind"
         android:textSize="16sp" />
 
     <TextView
@@ -61,8 +54,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/windText"
-        android:layout_marginTop="5dp"
-        android:text="Sunrise"
         android:textSize="16sp" />
 
     <TextView
@@ -70,41 +61,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/sunriseText"
-        android:layout_marginTop="5dp"
-        android:text="Sunset"
         android:textSize="16sp" />
     <TextView
         android:id="@+id/lastupdateText"
-        android:layout_marginTop="5dp"
-        android:text="Last Update"
         android:layout_below="@+id/sunsetText"
         android:layout_centerHorizontal="true"
         android:textSize="26sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-
-
-    <Button
-        android:id="@+id/showDialogBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_text"
-        android:onClick="showDialog"
-        android:background="#58079e"
-        android:layout_alignBaseline="@+id/showPlacesDialog"
-        android:layout_alignBottom="@+id/showPlacesDialog"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/showPlacesDialog"
-        android:layout_toStartOf="@+id/showPlacesDialog" />
-
     <TextView
         android:id="@+id/pressureText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
-        android:text="Pressure"
+        android:layout_marginTop="10dp"
         android:textSize="16sp"
         android:layout_below="@+id/thumbnailIcon"
         android:layout_alignParentLeft="true"
@@ -114,24 +84,28 @@
         android:id="@+id/tempText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12 deg"
         android:textSize="42dp"
         android:layout_alignTop="@+id/thumbnailIcon"
         android:layout_toRightOf="@+id/thumbnailIcon"
         android:layout_toEndOf="@+id/thumbnailIcon"
         android:layout_marginLeft="28dp"
         android:layout_marginStart="28dp" />
-
+    <Button
+        android:id="@+id/showDialogBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_text"
+        android:layout_below="@+id/lastupdateText"
+        android:onClick="showDialog"
+        android:background="#58079e" />
     <Button
         android:id="@+id/showPlacesDialog"
         android:background="#58079e"
         android:text="Show Places"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:onClick="showPlaces"
-        android:layout_below="@+id/lastupdateText"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/tempText"
-        android:layout_alignStart="@+id/tempText" />
+        android:layout_below="@+id/showDialogBtn"/>
+
 </RelativeLayout>

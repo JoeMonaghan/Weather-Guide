@@ -25,7 +25,6 @@
         android:id="@+id/editName" />
 
     <TextView
-        android:text="Location"
         android:textSize="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="5dp"
@@ -34,7 +33,7 @@
         android:id="@+id/locationTxt" />
 
     <Button
-        android:text="Store"
+        android:text="@string/store"
         android:id="@+id/storeBtn"
         android:background="#58079e"
         android:layout_marginTop="10dp"
