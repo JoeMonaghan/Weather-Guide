@@ -16,7 +16,7 @@ import android.util.Log;
  * Created by joe on 03/03/2017.
  */
 
-public class PreferenceOpenHelper extends SQLiteOpenHelper {
+public class ThemeOpenHelper extends SQLiteOpenHelper {
 
     // .
     private static final String DATABASE_NAME = "Locations.db";
@@ -38,7 +38,7 @@ public class PreferenceOpenHelper extends SQLiteOpenHelper {
                     PERSON_NAME + " TEXT NOT NULL,\n" +
                     CITY + " TEXT NOT NULL);";
 
-    public PreferenceOpenHelper(Context context) {
+    public ThemeOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
